@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaIntegrationSamplesApplication</title>
+</head>
+<body>
+<p>Seja bem vindo</p>
+<br/>
+<button onclick="userAction()">Ler dados</button>
+<ul id="conteudo">
+
+</ul>
+
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+
+const userAction = async () => {
+    axios.get('http://localhost:8080/api/client')
+    .then ((res) => {
+        var lista = res.data;
+        lista.map(x => {
+            var ul = document. getElementById("conteudo");
+            var li = document. createElement("li");
+            li. appendChild(document.createTextNode(x.name));
+            ul. appendChild(li);
+        })
+})
+
+}
+
+
+</script>
