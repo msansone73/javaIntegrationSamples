@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <title>JavaIntegrationSamplesApplication</title>
 </head>
-<body>
+<body onload="carregaLista()">
 <p>Seja bem vindo</p>
 <br/>
-<button onclick="userAction()">Ler dados</button>
+<form id="formulario">
+    <div>
+        Id:
+    </div>
+    <div>
+        nome: <input id="name" name="name"/>
+    </div>
+    <div>
+        email: <input id="email" name="email"/>
+    </div>
+    <div>
+        <button onclick="salvar(event)">Salvar</button>
+    </div>
+</form>
 <ul id="conteudo">
-
 </ul>
 
 </body>
@@ -19,19 +31,46 @@
 
 <script type="text/javascript">
 
-const userAction = async () => {
+function salvar(e){
+    e.preventDefault();
+    var name = document.getElementById("name").value
+    var email = document.getElementById("email").value
+
+   var body = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value
+    }
+
+    axios({
+        method: 'post',
+        url: 'http://localhost:8080/api/client',
+        data: body
+    })
+    .then(function (response) {
+        console.log(response);
+        document.getElementById("name").value='';
+        document.getElementById("email").value='';
+        carregaLista();
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
+
+const carregaLista = async () => {
     axios.get('http://localhost:8080/api/client')
     .then ((res) => {
         var lista = res.data;
+        var ul = document.getElementById("conteudo");
+        ul.innerHTML='';
         lista.map(x => {
-            var ul = document. getElementById("conteudo");
-            var li = document. createElement("li");
-            li. appendChild(document.createTextNode(x.name));
-            ul. appendChild(li);
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(x.name));
+            ul.appendChild(li);
         })
-})
-
+    })
 }
+
 
 
 </script>
